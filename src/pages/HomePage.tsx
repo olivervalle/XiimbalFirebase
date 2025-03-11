@@ -3,7 +3,7 @@ import { getBusinesses, getUserFavorites } from "../lib/businessService";
 import { Business, BusinessFilter } from "../types/business";
 import { useAuth } from "../context/AuthContext";
 import BusinessGrid from "../components/business/BusinessGrid";
-import BusinessFilterComponent from "../components/business/BusinessFilter";
+import InlineBusinessFilter from "../components/business/InlineBusinessFilter";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -70,7 +70,7 @@ export default function HomePage() {
         </p>
       </div>
 
-      <BusinessFilterComponent
+      <InlineBusinessFilter
         onFilterChange={handleFilterChange}
         initialFilters={filters}
       />

@@ -100,7 +100,10 @@ export default function FilterSelect({
     <div className="mb-6">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" className="flex gap-2">
+          <Button 
+            variant="outline" 
+            className="flex gap-2"
+          >
             <SlidersHorizontal className="h-4 w-4" />
             <span>Filtros</span>
             {activeFilters.length > 0 && (
@@ -110,7 +113,7 @@ export default function FilterSelect({
             )}
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent side="right">
           <SheetHeader>
             <SheetTitle>Filtrar Negocios</SheetTitle>
           </SheetHeader>

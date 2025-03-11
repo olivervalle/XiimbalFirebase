@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Search, X } from "lucide-react";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { Input } from "../ui/input";
-import { BusinessFilter as BusinessFilterType } from "../../types/business";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { BusinessFilter as BusinessFilterType } from "@/types/business";
 import SimpleFilterSelect from "./SimpleFilterSelect";
 
 const formSchema = z.object({
@@ -19,7 +19,7 @@ interface BusinessFilterProps {
   initialFilters?: BusinessFilterType;
 }
 
-export default function BusinessFilter({
+export default function SimpleBusinessFilter({
   onFilterChange,
   initialFilters = {},
 }: BusinessFilterProps) {
@@ -46,11 +46,12 @@ export default function BusinessFilter({
   };
 
   const handleFilterChange = (filterValues: BusinessFilterType) => {
-    const newFilters = { ...filters, ...filterValues };
+    // Create a new filter object with the new values
+    const newFilters = { ...filterValues };
     
-    // Remove searchTerm if it's not in the new filters
-    if (!filterValues.searchTerm && filters.searchTerm) {
-      delete newFilters.searchTerm;
+    // Keep the search term if it exists
+    if (filters.searchTerm) {
+      newFilters.searchTerm = filters.searchTerm;
     }
     
     setFilters(newFilters);
@@ -58,7 +59,7 @@ export default function BusinessFilter({
   };
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="space-y-4">
       <Form {...form}>
         <div className="flex gap-2">
           <FormField
@@ -79,18 +80,24 @@ export default function BusinessFilter({
                           handleSearchSubmit(form.getValues());
                         }
                       }}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        // Apply filter automatically when typing
+                        if (e.target.value === "") {
+                          handleSearchSubmit({
+                            searchTerm: "",
+                          });
+                        }
+                      }}
                     />
                   </FormControl>
                   {field.value && (
                     <button
                       type="button"
-                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full hover:bg-muted"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 inline-flex items-center justify-center rounded-full hover:bg-muted"
+                      onClick={() => {
                         form.setValue("searchTerm", "");
                         handleSearchSubmit({
-                          ...form.getValues(),
                           searchTerm: "",
                         });
                       }}
